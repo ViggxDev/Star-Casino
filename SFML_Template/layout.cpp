@@ -1,8 +1,21 @@
 #include "layout.h"
 
+//Runs at start of program from main.cpp
+void layout::start()
+{
+    DisplayWindow();
+}
+
+//Runs while window is open
+void layout::update()
+{
+    
+}
+
 //Main part of the layout
 #pragma region main
 
+//Define window and gui in header file
 layout::layout()
 {
     window = new sf::RenderWindow({ 1200, 800 }, WindowTitle);
@@ -16,7 +29,7 @@ void layout::btnPress(std::string text)
         createLoginFrame();
     }
     else {
-        creatMainLoginFrame();
+        createMainMenu();
     }
 };
 
@@ -38,7 +51,7 @@ float layout::getPos(std::string p, bool isWidth) {
     return pos;
 }
 
-//Create a Button and Call the btnPress function.
+//Create a Button and Call the btnPress func.
 //Tuple<size.x, size.y, position.x, position.y>
 void layout::makeButton(std::string btnName, std::string buttonText, const std::tuple<float, float, float, std::string, std::string, sf::Color, sf::Color>& sizeAndPos) {
     auto button = tgui::Button::create(buttonText);
@@ -50,7 +63,11 @@ void layout::makeButton(std::string btnName, std::string buttonText, const std::
 
     button->setOrigin(0.5f, 0.5f);
 
-    button->getRenderer()->setTextStyle(sf::Text::Bold);
+    //Assign renderer & set text & border styles
+    auto renderer = button->getRenderer();
+
+    renderer->setTextStyle(sf::Text::Bold);
+    renderer->setBorders({ 5,5,5,5 });
 
     gui->add(button);
 
@@ -107,13 +124,33 @@ void layout::setBackgroundGradient() {
     window->draw(background);
 }
 
+// Modify this function in layout.cpp
+tgui::EditBox::Ptr layout::makeInput(std::string inputName, const std::tuple<float, float, float, std::string, std::string, sf::Color, sf::Color>& sizeAndPos)
+{
+    auto input = tgui::EditBox::create();
+    input->setSize({ std::get<1>(sizeAndPos), std::get<2>(sizeAndPos) });
+    input->setPosition({ getPos(std::get<3>(sizeAndPos), true), getPos(std::get<4>(sizeAndPos), false) });
+
+    input->setTextSize(std::get<0>(sizeAndPos));
+
+    // Set the alignment of the text to center
+    input->setAlignment(tgui::EditBox::Alignment::Center);
+
+    input->setOrigin(0.5, 0.5);
+
+    gui->add(input);
+
+    return input;
+}
+
+
 //For a easy debugging will show if a file counld not be opened in the console.
 bool layout::RunGUI()
 {
     //Try and create the main frame
     try
     {
-        creatMainLoginFrame();
+        createMainMenu();
         return true;
     }
     catch (const tgui::Exception& e)
@@ -142,6 +179,7 @@ void layout::DisplayWindow()
 
         window->clear();
 
+        update();
         setBackgroundGradient();
 
         gui->draw();
@@ -159,12 +197,14 @@ void layout::clearGui()
     gui->removeAllWidgets();
 }
 
-void layout::creatMainLoginFrame()
+void layout::createMainMenu()
 {
     clearGui();
     makeLabel("STAR EXPLORER", {100.f, "50%", "10%", sf::Color::White});
     makeButton("LoginPageRedirect", "LOGIN", { 75.f, 500.f, 100.f, "50%", "50%", sf::Color::White, sf::Color::Blue});
     makeButton("LoginPageRedirect", "REGISTER", { 75.f, 500.f, 100.f, "50%", "70%", sf::Color::White, sf::Color::Blue });
+
+    makeInput("UsernameInput", { 35.f, 500.f, 100.f, "50%", "30%", sf::Color::White, sf::Color::Blue });
 }
 
 void layout::createLoginFrame()

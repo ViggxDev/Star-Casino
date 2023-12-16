@@ -7,7 +7,7 @@
 void StartApplication() {
 	layout Layout;
 
-	Layout.DisplayWindow();
+	Layout.start();
 }
 
 //main entry
