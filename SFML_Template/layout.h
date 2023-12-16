@@ -13,9 +13,9 @@ public:
     void DisplayWindow();
     void btnPress(std::string text);
     float getPos(std::string y, bool isWidth);
-    void makeButton(std::string btnName, std::string buttonText, const std::tuple<float, float, float, std::string, std::string, sf::Color, sf::Color>& sizeAndPos);
+    void makeButton(std::string btnName, std::string buttonText, const std::tuple<float, float, float, std::string, std::string>& sizeAndPos);
     void makeLabel(std::string text, const std::tuple<float, std::string, std::string, sf::Color> properties);
-    tgui::EditBox::Ptr makeInput(std::string inputName, const std::tuple<float, float, float, std::string, std::string, sf::Color, sf::Color>& sizeAndPos);
+    tgui::EditBox::Ptr makeInput(const std::tuple<float, float, float, std::string, std::string>& sizeAndPos);
 
     
     bool RunGUI();
@@ -24,12 +24,15 @@ public:
     void clearGui();
 
     void createMainMenu();
-    void createLoginFrame();
+    void createCreateUserFrame();
 private:
     tgui::GuiSFML* gui;
     sf::RenderWindow* window;
 
-    std::string WindowTitle = "Casino";
+    //Input fields
+    tgui::EditBox::Ptr nameBox;
+    
+    tgui::String tempName;
 
-    int i = 0;
+    std::string WindowTitle = "Casino";
 };

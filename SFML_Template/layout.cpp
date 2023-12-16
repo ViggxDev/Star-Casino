@@ -25,8 +25,12 @@ layout::layout()
 //Print Something on the Concole
 void layout::btnPress(std::string text)
 {
-    if (text == "LoginPageRedirect") {
-        createLoginFrame();
+    if (text == "PlayBtn") {
+        createCreateUserFrame();
+    }
+    else if (text == "PlayGameButton") {
+        tempName = nameBox->getText();
+        std::cout << tempName << std::endl;
     }
     else {
         createMainMenu();
@@ -53,7 +57,7 @@ float layout::getPos(std::string p, bool isWidth) {
 
 //Create a Button and Call the btnPress func.
 //Tuple<size.x, size.y, position.x, position.y>
-void layout::makeButton(std::string btnName, std::string buttonText, const std::tuple<float, float, float, std::string, std::string, sf::Color, sf::Color>& sizeAndPos) {
+void layout::makeButton(std::string btnName, std::string buttonText, const std::tuple<float, float, float, std::string, std::string>& sizeAndPos) {
     auto button = tgui::Button::create(buttonText);
 
     button->setTextSize(std::get<0>(sizeAndPos));
@@ -93,6 +97,26 @@ void layout::makeLabel(std::string text, const std::tuple<float, std::string, st
     gui->add(label);
 };
 
+// Modify this function in layout.cpp
+tgui::EditBox::Ptr layout::makeInput(const std::tuple<float, float, float, std::string, std::string>& sizeAndPos)
+{
+    auto input = tgui::EditBox::create();
+    input->setSize({ std::get<1>(sizeAndPos), std::get<2>(sizeAndPos) });
+    input->setPosition({ getPos(std::get<3>(sizeAndPos), true), getPos(std::get<4>(sizeAndPos), false) });
+
+    input->setTextSize(std::get<0>(sizeAndPos));
+
+    // Set the alignment of the text to center
+    input->setAlignment(tgui::EditBox::Alignment::Center);
+    input->setMaximumCharacters(10);
+
+    input->setOrigin(0.5f, 0.5f);
+
+    gui->add(input);
+
+    return input;
+}
+
 // Set the background gradient
 void layout::setBackgroundGradient() {
     // Create a vertex array for the background
@@ -123,26 +147,6 @@ void layout::setBackgroundGradient() {
 
     window->draw(background);
 }
-
-// Modify this function in layout.cpp
-tgui::EditBox::Ptr layout::makeInput(std::string inputName, const std::tuple<float, float, float, std::string, std::string, sf::Color, sf::Color>& sizeAndPos)
-{
-    auto input = tgui::EditBox::create();
-    input->setSize({ std::get<1>(sizeAndPos), std::get<2>(sizeAndPos) });
-    input->setPosition({ getPos(std::get<3>(sizeAndPos), true), getPos(std::get<4>(sizeAndPos), false) });
-
-    input->setTextSize(std::get<0>(sizeAndPos));
-
-    // Set the alignment of the text to center
-    input->setAlignment(tgui::EditBox::Alignment::Center);
-
-    input->setOrigin(0.5, 0.5);
-
-    gui->add(input);
-
-    return input;
-}
-
 
 //For a easy debugging will show if a file counld not be opened in the console.
 bool layout::RunGUI()
@@ -200,18 +204,21 @@ void layout::clearGui()
 void layout::createMainMenu()
 {
     clearGui();
-    makeLabel("STAR EXPLORER", {100.f, "50%", "10%", sf::Color::White});
-    makeButton("LoginPageRedirect", "LOGIN", { 75.f, 500.f, 100.f, "50%", "50%", sf::Color::White, sf::Color::Blue});
-    makeButton("LoginPageRedirect", "REGISTER", { 75.f, 500.f, 100.f, "50%", "70%", sf::Color::White, sf::Color::Blue });
-
-    makeInput("UsernameInput", { 35.f, 500.f, 100.f, "50%", "30%", sf::Color::White, sf::Color::Blue });
+    makeLabel("STAR EXPLORER", { 100.f, "50%", "10%", sf::Color::White });
+    makeButton("PlayBtn", "PLAY", { 80.f, 600.f, 150.f, "50%", "50%"});
+    makeButton("LeaderBoardBtn", "LEADERBOARD", { 75.f, 600.f, 150.f, "50%", "70%"});
 }
 
-void layout::createLoginFrame()
+void layout::createCreateUserFrame()
 {
     clearGui();
-    makeLabel("Login", { 100.f, "50%", "10%", sf::Color::White });
-    makeButton("MainFrameRedirect", "Main Menu", { 75.f, 500.f, 100.f, "50%", "50%", sf::Color::White, sf::Color::Blue });
+    makeLabel("USER", { 100.f, "50%", "10%", sf::Color::White });
+    makeLabel("ENTER NAME", { 30.f, "50%", "30%", sf::Color::White });
+
+    makeButton("PlayGameButton", "PLAY", { 75.f, 500.f, 100.f, "50%", "60%" });
+    makeButton("MainMenuBtn", "BACK", { 75.f, 500.f, 100.f, "50%", "75%" });
+
+    nameBox = makeInput({ 75.f, 500.f, 100.f, "50%", "40%" });
 }
 
 #pragma endregion frames
