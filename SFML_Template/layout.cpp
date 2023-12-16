@@ -16,7 +16,7 @@ void layout::btnPress(std::string text)
         createLoginFrame();
     }
     else {
-        createMainFrame();
+        creatMainLoginFrame();
     }
 };
 
@@ -70,12 +70,11 @@ void layout::makeLabel(std::string text, const std::tuple<float, std::string, st
 
     label->getRenderer()->setTextColor(std::get<3>(properties)); // Set text color
 
-    label->onMousePress.connect([this, text]() {this->btnPress(text);});
+    label->onMousePress.connect([this, text]() {this->btnPress(text); });
 
     // Add the label to the gui
     gui->add(label);
-}
-
+};
 
 // Set the background gradient
 void layout::setBackgroundGradient() {
@@ -114,7 +113,7 @@ bool layout::RunGUI()
     //Try and create the main frame
     try
     {
-        createMainFrame();
+        creatMainLoginFrame();
         return true;
     }
     catch (const tgui::Exception& e)
@@ -160,10 +159,10 @@ void layout::clearGui()
     gui->removeAllWidgets();
 }
 
-void layout::createMainFrame()
+void layout::creatMainLoginFrame()
 {
     clearGui();
-    makeLabel("Casino", {100.f, "50%", "10%", sf::Color::White});
+    makeLabel("STAR EXPLORER", {100.f, "50%", "10%", sf::Color::White});
     makeButton("LoginPageRedirect", "LOGIN", { 75.f, 500.f, 100.f, "50%", "50%", sf::Color::White, sf::Color::Blue});
     makeButton("LoginPageRedirect", "REGISTER", { 75.f, 500.f, 100.f, "50%", "70%", sf::Color::White, sf::Color::Blue });
 }

@@ -17,7 +17,7 @@ public:
 
     void clearGui();
 
-    void createMainFrame();
+    void creatMainLoginFrame();
     void createLoginFrame();
 private:
     tgui::GuiSFML* gui;
