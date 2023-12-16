@@ -1,4 +1,5 @@
 #include "layout.h"
+#include "data.h"
 
 //Runs at start of program from main.cpp
 void layout::start()
@@ -25,12 +26,23 @@ layout::layout()
 //Print Something on the Concole
 void layout::btnPress(std::string text)
 {
+    data Data;
+
+    //Function of buttons
     if (text == "PlayBtn") {
         createCreateUserFrame();
     }
     else if (text == "PlayGameButton") {
         tempName = nameBox->getText();
-        std::cout << tempName << std::endl;
+        //Check so that the input field is empty or not
+        if (tempName == "") { 
+            makeLabel("PLEASE ENTER A NAME", { 30.f, "50%", "50%", sf::Color::Red });
+            return;
+        }
+        //Name was found
+        Data.setCurrentName(tempName);
+        std::cout << Data.getCurrentName() << std::endl;
+        createGameFrame();
     }
     else {
         createMainMenu();
@@ -79,7 +91,7 @@ void layout::makeButton(std::string btnName, std::string buttonText, const std::
 }
 
 //Function to create label
-void layout::makeLabel(std::string text, const std::tuple<float, std::string, std::string, sf::Color> properties) {
+tgui::Label::Ptr layout::makeLabel(std::string text, const std::tuple<float, std::string, std::string, sf::Color> properties) {
     auto label = tgui::Label::create();
     label->setText(text);
     label->setTextSize(std::get<0>(properties));
@@ -95,6 +107,8 @@ void layout::makeLabel(std::string text, const std::tuple<float, std::string, st
 
     // Add the label to the gui
     gui->add(label);
+
+    return label;
 };
 
 // Modify this function in layout.cpp
@@ -105,6 +119,7 @@ tgui::EditBox::Ptr layout::makeInput(const std::tuple<float, float, float, std::
     input->setPosition({ getPos(std::get<3>(sizeAndPos), true), getPos(std::get<4>(sizeAndPos), false) });
 
     input->setTextSize(std::get<0>(sizeAndPos));
+    input->setDefaultText("Enter Name");
 
     // Set the alignment of the text to center
     input->setAlignment(tgui::EditBox::Alignment::Center);
@@ -115,6 +130,13 @@ tgui::EditBox::Ptr layout::makeInput(const std::tuple<float, float, float, std::
     gui->add(input);
 
     return input;
+}
+
+void layout::updateScoreUI()
+{
+    data Data;
+
+    scoreUI->setText("Score: " + Data.getScore());
 }
 
 // Set the background gradient
@@ -184,8 +206,14 @@ void layout::DisplayWindow()
         window->clear();
 
         update();
-        setBackgroundGradient();
 
+        //Check what bg to use
+        switch (bg) {
+        case 0:
+            setBackgroundGradient();
+        }
+
+        //Display window
         gui->draw();
         window->display();
     }
@@ -207,6 +235,8 @@ void layout::createMainMenu()
     makeLabel("STAR EXPLORER", { 100.f, "50%", "10%", sf::Color::White });
     makeButton("PlayBtn", "PLAY", { 80.f, 600.f, 150.f, "50%", "50%"});
     makeButton("LeaderBoardBtn", "LEADERBOARD", { 75.f, 600.f, 150.f, "50%", "70%"});
+
+    bg = 0;
 }
 
 void layout::createCreateUserFrame()
@@ -219,6 +249,16 @@ void layout::createCreateUserFrame()
     makeButton("MainMenuBtn", "BACK", { 75.f, 500.f, 100.f, "50%", "75%" });
 
     nameBox = makeInput({ 75.f, 500.f, 100.f, "50%", "40%" });
+
+    bg = 0;
+}
+
+void layout::createGameFrame()
+{
+    clearGui();
+    scoreUI = makeLabel("Score: 0", { 100.f, "50%", "10%", sf::Color::White });
+
+    bg = 1;
 }
 
 #pragma endregion frames
