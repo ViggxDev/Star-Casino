@@ -9,10 +9,6 @@ void StartApplication() {
 	layout Layout;
 
 	Layout.start();
-
-	data Data;
-
-	Data.updateScores(500);
 }
 
 //main entry

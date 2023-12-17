@@ -13,13 +13,16 @@ public:
 	std::vector<int> sortTopScores(std::vector<int> arr);
 
 	void updateScores(int newScore);
-	void newScore();
+	
+	int getHighScore();
 
 	void setCurrentName(tgui::String name);
-	void setScore(int newScore);
+	void resetScore();
 
 	tgui::String getCurrentName();
-	int getScore();
+	int getCurrentScore();
+
+	void updateCurrentScore(int toAdd);
 
 private:
 	tgui::String currentName;

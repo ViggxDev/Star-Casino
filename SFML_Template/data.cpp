@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <string>
 
 data::data()
 {
@@ -55,6 +56,8 @@ void data::updateScores(int newScore)
 	scores.push_back(newScore);
 	scores = sortTopScores(scores);
 
+	score = scores.at(0);
+
 	std::ofstream myfile("scores.txt");
 
 	if (myfile.is_open())
@@ -62,6 +65,7 @@ void data::updateScores(int newScore)
 		for (int score : scores) {
 			myfile << score << "\n";
 		}
+		myfile.flush();
 		myfile.close();
 	}
 	else
@@ -70,8 +74,9 @@ void data::updateScores(int newScore)
 	}
 }
 
-void data::newScore()
+int data::getHighScore()
 {
+	return getScores().at(0);
 }
 
 void data::setCurrentName(tgui::String name)
@@ -79,12 +84,9 @@ void data::setCurrentName(tgui::String name)
 	currentName = name;
 }
 
-void data::setScore(int newScore)
+void data::resetScore()
 {
-	layout Layout;
-
-	score = newScore;
-	Layout.updateScoreUI();
+	score = 0;
 }
 
 tgui::String data::getCurrentName()
@@ -92,7 +94,16 @@ tgui::String data::getCurrentName()
 	return currentName;
 }
 
-int data::getScore()
+int data::getCurrentScore()
 {
 	return score;
+}
+
+void data::updateCurrentScore(int toAdd)
+{
+	layout Layout;
+
+	score += toAdd;
+
+	Layout.updateScoreUI();
 }

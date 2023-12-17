@@ -19,7 +19,8 @@ void layout::update()
 //Define window and gui in header file
 layout::layout()
 {
-    window = new sf::RenderWindow({ 1200, 800 }, WindowTitle);
+    sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+    window = new sf::RenderWindow(desktop, WindowTitle, sf::Style::Fullscreen);
     gui = new tgui::GuiSFML(*window);
 }
 
@@ -136,7 +137,7 @@ void layout::updateScoreUI()
 {
     data Data;
 
-    scoreUI->setText("Score: " + Data.getScore());
+    scoreUI->setText("Score: " + Data.getCurrentScore());
 }
 
 // Set the background gradient
@@ -189,7 +190,11 @@ bool layout::RunGUI()
 //Main function to display the window
 void layout::DisplayWindow()
 {
+    data Data;
+
     RunGUI();
+
+    std::cout << Data.getHighScore() << std::endl;
 
     //Run while window is open
     while (window->isOpen())
@@ -200,7 +205,9 @@ void layout::DisplayWindow()
             gui->handleEvent(event);
 
             if (event.type == sf::Event::Closed)
-                window->close();
+                forceQuit();
+            if (event.key.code == sf::Keyboard::Escape)
+                forceQuit();
         }
 
         window->clear();
@@ -227,6 +234,11 @@ void layout::DisplayWindow()
 void layout::clearGui()
 {
     gui->removeAllWidgets();
+}
+
+void layout::forceQuit()
+{
+    window->close();
 }
 
 void layout::createMainMenu()

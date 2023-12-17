@@ -25,6 +25,8 @@ public:
 
     void clearGui();
 
+    void forceQuit();
+
     void createMainMenu();
     void createCreateUserFrame();
     void createGameFrame();
