@@ -141,6 +141,9 @@
     <ClInclude Include="data.h" />
     <ClInclude Include="layout.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="scores.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

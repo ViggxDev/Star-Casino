@@ -2,13 +2,18 @@
 
 #include <TGUI/TGUI.hpp>
 #include <SFML/Graphics.hpp>
+#include <vector>
 
 class data
 {
 public:
 	data();
 
-	void addNewScore();
+	std::vector<int> getScores();
+	std::vector<int> sortTopScores(std::vector<int> arr);
+
+	void updateScores(int newScore);
+	void newScore();
 
 	void setCurrentName(tgui::String name);
 	void setScore(int newScore);
