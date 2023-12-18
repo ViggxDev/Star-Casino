@@ -117,7 +117,7 @@ tgui::Label::Ptr layout::makeLabel(std::string text, const std::tuple<float, std
 };
 
 // Modify this function in layout.cpp
-tgui::EditBox::Ptr layout::makeInput(const std::tuple<float, float, float, std::string, std::string, std::string>& sizeAndPos)
+tgui::EditBox::Ptr layout::makeInput(const std::tuple<float, float, float, std::string, std::string, std::string, int>& sizeAndPos)
 {
     auto input = tgui::EditBox::create();
     input->setSize({ std::get<1>(sizeAndPos), std::get<2>(sizeAndPos) });
@@ -128,7 +128,7 @@ tgui::EditBox::Ptr layout::makeInput(const std::tuple<float, float, float, std::
 
     // Set the alignment of the text to center
     input->setAlignment(tgui::EditBox::Alignment::Center);
-    input->setMaximumCharacters(10);
+    input->setMaximumCharacters(std::get<6>(sizeAndPos));
 
     input->setOrigin(0.5f, 0.5f);
 
@@ -137,9 +137,13 @@ tgui::EditBox::Ptr layout::makeInput(const std::tuple<float, float, float, std::
     return input;
 }
 
+//Change the UI that is displayed on the screen
 void layout::updateScoreUI(int score)
 {
-    scoreUI->setText("Score: " + std::to_string(score));
+    //Chceck to see if the scoreUI has been created yet, if not. Skip this
+    if (scoreUI != nullptr) {
+        scoreUI->setText("Score: " + std::to_string(score));
+    }
 }
 
 // Set the background gradient
@@ -204,6 +208,8 @@ void layout::DisplayWindow()
 
     std::cout << Data.getHighScore() << std::endl;
 
+    Data.updateCurrentScore(15, this);
+
     //Run while window is open
     while (window->isOpen())
     {
@@ -263,7 +269,7 @@ void layout::createCreateUserFrame()
     makeButton("PlayGameButton", "PLAY", { 75.f, 500.f, 100.f, "50%", "60%" });
     makeButton("MainMenuBtn", "BACK", { 75.f, 500.f, 100.f, "50%", "75%" });
 
-    nameBox = makeInput({ 75.f, 500.f, 100.f, "50%", "40%", "Enter Name"});
+    nameBox = makeInput({ 75.f, 500.f, 100.f, "50%", "40%", "Enter Name", 10});
 
     bg = 0;
 }
@@ -274,8 +280,6 @@ void layout::createGameFrame()
 
     clearGui();
     scoreUI = makeLabel("Score: 0", { 100.f, "50%", "10%", sf::Color::White });
-
-    Data.updateCurrentScore(15, this);
 
     bg = 1;
 }
