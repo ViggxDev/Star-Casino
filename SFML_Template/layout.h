@@ -16,7 +16,7 @@ public:
     float getPos(std::string y, bool isWidth);
     void makeButton(std::string btnName, std::string buttonText, const std::tuple<float, float, float, std::string, std::string>& sizeAndPos);
     tgui::Label::Ptr makeLabel(std::string text, const std::tuple<float, std::string, std::string, sf::Color> properties);
-    tgui::EditBox::Ptr makeInput(const std::tuple<float, float, float, std::string, std::string>& sizeAndPos);
+    tgui::EditBox::Ptr makeInput(const std::tuple<float, float, float, std::string, std::string, std::string>& sizeAndPos);
 
     void updateScoreUI();
 

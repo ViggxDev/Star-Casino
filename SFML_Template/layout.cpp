@@ -113,14 +113,14 @@ tgui::Label::Ptr layout::makeLabel(std::string text, const std::tuple<float, std
 };
 
 // Modify this function in layout.cpp
-tgui::EditBox::Ptr layout::makeInput(const std::tuple<float, float, float, std::string, std::string>& sizeAndPos)
+tgui::EditBox::Ptr layout::makeInput(const std::tuple<float, float, float, std::string, std::string, std::string>& sizeAndPos)
 {
     auto input = tgui::EditBox::create();
     input->setSize({ std::get<1>(sizeAndPos), std::get<2>(sizeAndPos) });
     input->setPosition({ getPos(std::get<3>(sizeAndPos), true), getPos(std::get<4>(sizeAndPos), false) });
 
     input->setTextSize(std::get<0>(sizeAndPos));
-    input->setDefaultText("Enter Name");
+    input->setDefaultText(std::get<5>(sizeAndPos));
 
     // Set the alignment of the text to center
     input->setAlignment(tgui::EditBox::Alignment::Center);
@@ -187,6 +187,12 @@ bool layout::RunGUI()
     }
 }
 
+//Quits the program & closes the UI
+void layout::forceQuit()
+{
+    window->close();
+}
+
 //Main function to display the window
 void layout::DisplayWindow()
 {
@@ -236,11 +242,6 @@ void layout::clearGui()
     gui->removeAllWidgets();
 }
 
-void layout::forceQuit()
-{
-    window->close();
-}
-
 void layout::createMainMenu()
 {
     clearGui();
@@ -260,7 +261,7 @@ void layout::createCreateUserFrame()
     makeButton("PlayGameButton", "PLAY", { 75.f, 500.f, 100.f, "50%", "60%" });
     makeButton("MainMenuBtn", "BACK", { 75.f, 500.f, 100.f, "50%", "75%" });
 
-    nameBox = makeInput({ 75.f, 500.f, 100.f, "50%", "40%" });
+    nameBox = makeInput({ 75.f, 500.f, 100.f, "50%", "40%", "Enter Name"});
 
     bg = 0;
 }

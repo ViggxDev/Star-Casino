@@ -46,7 +46,7 @@ std::vector<int> data::getScores()
 		std::cout << "Unable to open scores file!" << std::endl;
 	}
 	
-	return arr;
+	return sortTopScores(arr);
 }
 
 //Function that updates and adds newScore to txt file
