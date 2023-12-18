@@ -1,6 +1,8 @@
 #include "layout.h"
 #include "data.h"
 
+#include <string>
+
 //Runs at start of program from main.cpp
 void layout::start()
 {
@@ -86,6 +88,8 @@ void layout::makeButton(std::string btnName, std::string buttonText, const std::
     renderer->setTextStyle(sf::Text::Bold);
     renderer->setBorders({ 5,5,5,5 });
 
+    renderer->setBorderColorFocused(renderer->getBorderColor());
+
     gui->add(button);
 
     button->onPress.connect([this, btnName]() { this->btnPress(btnName); });
@@ -133,11 +137,9 @@ tgui::EditBox::Ptr layout::makeInput(const std::tuple<float, float, float, std::
     return input;
 }
 
-void layout::updateScoreUI()
+void layout::updateScoreUI(int score)
 {
-    data Data;
-
-    scoreUI->setText("Score: " + Data.getCurrentScore());
+    scoreUI->setText("Score: " + std::to_string(score));
 }
 
 // Set the background gradient
@@ -268,8 +270,12 @@ void layout::createCreateUserFrame()
 
 void layout::createGameFrame()
 {
+    data Data;
+
     clearGui();
     scoreUI = makeLabel("Score: 0", { 100.f, "50%", "10%", sf::Color::White });
+
+    Data.updateCurrentScore(15, this);
 
     bg = 1;
 }

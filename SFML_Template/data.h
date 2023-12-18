@@ -3,6 +3,7 @@
 #include <TGUI/TGUI.hpp>
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include "layout.h"
 
 class data
 {
@@ -22,7 +23,7 @@ public:
 	tgui::String getCurrentName();
 	int getCurrentScore();
 
-	void updateCurrentScore(int toAdd);
+	void updateCurrentScore(int toAdd, layout* Layout);
 
 private:
 	tgui::String currentName;

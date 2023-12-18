@@ -18,7 +18,7 @@ public:
     tgui::Label::Ptr makeLabel(std::string text, const std::tuple<float, std::string, std::string, sf::Color> properties);
     tgui::EditBox::Ptr makeInput(const std::tuple<float, float, float, std::string, std::string, std::string>& sizeAndPos);
 
-    void updateScoreUI();
+    void updateScoreUI(int score);
 
     bool RunGUI();
     void setBackgroundGradient();

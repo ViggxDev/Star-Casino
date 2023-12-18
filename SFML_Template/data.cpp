@@ -99,11 +99,10 @@ int data::getCurrentScore()
 	return score;
 }
 
-void data::updateCurrentScore(int toAdd)
+void data::updateCurrentScore(int toAdd, layout* Layout)
 {
-	layout Layout;
 
 	score += toAdd;
 
-	Layout.updateScoreUI();
+	Layout->updateScoreUI(score);
 }
