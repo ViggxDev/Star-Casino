@@ -10,20 +10,19 @@ class data
 public:
 	data();
 
-	std::vector<int> getScores();
-	std::vector<int> sortTopScores(std::vector<int> arr);
+	void start();
 
-	void updateScores(int newScore);
+	std::string getInfo(int line);
+
+	std::vector<std::string> getFullData();
 	
-	int getHighScore();
+	void updateValue(int line, std::string value);
 
 	void setCurrentName(tgui::String name);
-	void resetScore();
+	void resetUser();
+	void createUserData();
 
 	tgui::String getCurrentName();
-	int getCurrentScore();
-
-	void updateCurrentScore(int toAdd, layout* Layout);
 
 private:
 	tgui::String currentName;

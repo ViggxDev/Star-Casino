@@ -5,65 +5,78 @@
 #include <iostream>
 #include <string>
 
+//Info about the data text file
+//Line: What it is
+//1 -> Username
+
 data::data()
 {
 
 }
 
-//Function to sort the top scores and return the top <= 25 scores
-std::vector<int> data::sortTopScores(std::vector<int> arr)
+void data::start()
 {
-	//Sort the top scores
-	std::sort(arr.begin(), arr.end());
-	std::reverse(arr.begin(), arr.end());
+	currentName = getInfo(1);
 
-	//Return the 25 scores highest in the sort, remove the lowest if over 25
-	std::vector<int> result;
-	int size = std::min(25, static_cast<int>(arr.size()));
-	for (int i = 0; i < size; ++i) {
-		result.push_back(arr[i]);
-	}
-
-	return result;
+	std::cout << currentName << std::endl;
 }
 
-//Function to get the scores saved from before in txt file
-std::vector<int> data::getScores()
+std::string data::getInfo(int pointerLine)
 {
-	std::vector<int> arr;
+	std::string value;
 
-	std::ifstream scores("scores.txt");
+	std::ifstream info("scores.txt");
 
-	if (scores.is_open()) {
+	if (info.is_open()) {
 		std::string line;
-		while (std::getline(scores, line)) {
-			if (line != "") {
-				arr.push_back(stoi(line));
+		int i = 0;
+		while (std::getline(info, line)) {
+			if (i == pointerLine) {
+				value = line;
+				break;
 			}
+			i++;
 		}
 	}
-	else {
-		std::cout << "Unable to open scores file!" << std::endl;
+
+	return value;
+}
+
+//Get the info
+std::vector<std::string> data::getFullData()
+{
+	std::vector<std::string> arr;
+
+	std::ifstream info("scores.txt");
+
+	if (info.is_open()) {
+		std::string line;
+		while (std::getline(info, line)) {
+			arr.push_back(line);
+		}
 	}
-	
-	return sortTopScores(arr);
+
+	return arr;
 }
 
 //Function that updates and adds newScore to txt file
-void data::updateScores(int newScore)
+void data::updateValue(int line, std::string value)
 {
-	std::vector<int> scores = getScores();
-	scores.push_back(newScore);
-	scores = sortTopScores(scores);
-
-	score = scores.at(0);
+	std::vector<std::string> info = getFullData();
 
 	std::ofstream myfile("scores.txt");
 
 	if (myfile.is_open())
 	{
-		for (int score : scores) {
-			myfile << score << "\n";
+		int l = 0;
+		for (std::string i : info) {
+			if (l != line-1) {
+				myfile << i << "\n";
+			}
+			else {
+				myfile << value << "\n";
+			}
+			l++;
 		}
 		myfile.flush();
 		myfile.close();
@@ -74,35 +87,28 @@ void data::updateScores(int newScore)
 	}
 }
 
-int data::getHighScore()
-{
-	return getScores().at(0);
-}
-
 void data::setCurrentName(tgui::String name)
 {
-	currentName = name;
+	std::string sName = name.toStdString();
+	updateValue(1, sName);
 }
 
-void data::resetScore()
+void data::resetUser()
 {
-	score = 0;
+	std::ofstream myfile("scores.txt");
+
+	if (myfile.is_open()) {
+		myfile.flush();
+		myfile.close();
+	}
+}
+
+void data::createUserData()
+{
+
 }
 
 tgui::String data::getCurrentName()
 {
-	return currentName;
-}
-
-int data::getCurrentScore()
-{
-	return score;
-}
-
-void data::updateCurrentScore(int toAdd, layout* Layout)
-{
-
-	score += toAdd;
-
-	Layout->updateScoreUI(score);
+	return getInfo(1);
 }

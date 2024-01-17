@@ -12,7 +12,7 @@ void layout::start()
 //Runs while window is open
 void layout::update()
 {
-    
+    //std::cout << "Updated!" << std::endl;
 }
 
 //Main part of the layout
@@ -29,27 +29,32 @@ layout::layout()
 //Print Something on the Concole
 void layout::btnPress(std::string text)
 {
-    data Data;
-
     //Function of buttons
-    if (text == "PlayBtn") {
-        createCreateUserFrame();
+    if (text == "LoadGameBtn") {
+        createOrResetUser();
     }
     else if (text == "PlayGameButton") {
-        tempName = nameBox->getText();
-        //Check so that the input field is empty or not
-        if (tempName == "") { 
-            makeLabel("PLEASE ENTER A NAME", { 30.f, "50%", "50%", sf::Color::Red });
-            return;
-        }
-        //Name was found
-        Data.setCurrentName(tempName);
-        std::cout << Data.getCurrentName() << std::endl;
-        createGameFrame();
+        playBtnPress();
     }
     else {
         createMainMenu();
     }
+}
+
+void layout::playBtnPress()
+{
+    data Data;
+
+    tempName = nameBox->getText();
+    //Check so that the input field is empty or not
+    if (tempName == "") {
+        makeLabel("PLEASE ENTER A NAME", { 30.f, "50%", "50%", sf::Color::Red });
+        return;
+    }
+    //Name was found
+    Data.setCurrentName(tempName);
+    std::cout << Data.getCurrentName() << std::endl;
+    createGameFrame();
 };
 
 float layout::getPos(std::string p, bool isWidth) {
@@ -152,8 +157,8 @@ void layout::setBackgroundGradient() {
     sf::VertexArray background(sf::Quads, 4);
 
     // Define the gradient colors
-    sf::Color colorLeft(117, 58, 136);
-    sf::Color colorRight(174, 50, 111);
+    sf::Color colorLeft(157, 197, 187);
+    sf::Color colorRight(94, 128, 127);
 
     // Set the gradient colors and positions for each vertex
     for (int i = 0; i < 4; ++i) {
@@ -206,10 +211,6 @@ void layout::DisplayWindow()
 
     RunGUI();
 
-    std::cout << Data.getHighScore() << std::endl;
-
-    Data.updateCurrentScore(15, this);
-
     //Run while window is open
     while (window->isOpen())
     {
@@ -218,9 +219,7 @@ void layout::DisplayWindow()
         {
             gui->handleEvent(event);
 
-            if (event.type == sf::Event::Closed)
-                forceQuit();
-            if (event.key.code == sf::Keyboard::Escape)
+            if (event.type == sf::Event::Closed || event.key.code == sf::Keyboard::Escape)
                 forceQuit();
         }
 
@@ -253,14 +252,14 @@ void layout::clearGui()
 void layout::createMainMenu()
 {
     clearGui();
-    makeLabel("STAR EXPLORER", { 100.f, "50%", "10%", sf::Color::White });
-    makeButton("PlayBtn", "PLAY", { 80.f, 600.f, 150.f, "50%", "50%"});
-    makeButton("LeaderBoardBtn", "LEADERBOARD", { 75.f, 600.f, 150.f, "50%", "70%"});
+    makeLabel("STAR CASINO", { 100.f, "50%", "10%", sf::Color::White });
+    makeButton("LoadGameBtn", "CONTINUE", { 80.f, 600.f, 150.f, "50%", "50%"});
+    makeButton("NewProfileBtn", "RESTART", { 80.f, 600.f, 150.f, "50%", "70%" });
 
     bg = 0;
 }
 
-void layout::createCreateUserFrame()
+void layout::createOrResetUser()
 {
     clearGui();
     makeLabel("USER", { 100.f, "50%", "10%", sf::Color::White });

@@ -13,6 +13,9 @@ public:
 
     void DisplayWindow();
     void btnPress(std::string text);
+
+    void playBtnPress();
+
     float getPos(std::string y, bool isWidth);
     void makeButton(std::string btnName, std::string buttonText, const std::tuple<float, float, float, std::string, std::string>& sizeAndPos);
     tgui::Label::Ptr makeLabel(std::string text, const std::tuple<float, std::string, std::string, sf::Color> properties);
@@ -28,7 +31,7 @@ public:
     void forceQuit();
 
     void createMainMenu();
-    void createCreateUserFrame();
+    void createOrResetUser();
     void createGameFrame();
 private:
     tgui::GuiSFML* gui;
