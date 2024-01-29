@@ -33,6 +33,7 @@ public:
     void createMainMenu();
     void createOrResetUser();
     void createGameFrame();
+    void createBlackJackFrame();
 private:
     tgui::GuiSFML* gui;
     sf::RenderWindow* window;

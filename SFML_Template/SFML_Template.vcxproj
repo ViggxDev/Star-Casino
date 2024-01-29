@@ -134,15 +134,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="data.cpp" />
+    <ClCompile Include="gameController.cpp" />
     <ClCompile Include="layout.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data.h" />
+    <ClInclude Include="gameController.h" />
     <ClInclude Include="layout.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="scores.txt" />
+    <Text Include="data.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

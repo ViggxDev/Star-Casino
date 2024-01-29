@@ -1,5 +1,6 @@
 #include "layout.h"
 #include "data.h"
+#include "gameController.h"
 
 #include <iostream>
 #include <string>
@@ -9,8 +10,9 @@
 void StartApplication() {
 	layout Layout;
 	data Data;
+	gameController gc;
 
-	Data.resetUser();
+	gc.dealersCards();
 
 	Data.start();
 	Layout.start();

@@ -29,12 +29,18 @@ layout::layout()
 //Print Something on the Concole
 void layout::btnPress(std::string text)
 {
+    data Data;
+
     //Function of buttons
     if (text == "LoadGameBtn") {
+        Data.resetAndCreateUserData();
         createOrResetUser();
     }
     else if (text == "PlayGameButton") {
         playBtnPress();
+    }
+    else if (text == "EnterBlackJack") {
+        createBlackJackFrame();
     }
     else {
         createMainMenu();
@@ -278,9 +284,25 @@ void layout::createGameFrame()
     data Data;
 
     clearGui();
-    scoreUI = makeLabel("Score: 0", { 100.f, "50%", "10%", sf::Color::White });
+    scoreUI = makeLabel("Cash: $0", { 75.f, "12%", "9%", sf::Color::White });
+
+    //Black Jack BTN
+    makeLabel("BLACKJACK", {100.f, "25%", "40%", sf::Color::White});
+    makeButton("EnterBlackJack", "ENTER", { 75.f, 450.f, 150.f, "25%", "55%" });
+
+    //Slot Machine BTN
+    makeLabel("SLOT MACHINE", { 100.f, "75%", "40%", sf::Color::White });
+    makeButton("SlotMachine", "ENTER", { 75.f, 450.f, 150.f, "75%", "55%" });
 
     bg = 1;
+}
+
+void layout::createBlackJackFrame()
+{
+    clearGui();
+    makeLabel("BLACKJACK", { 50.f, "50%", "9%", sf::Color::White });
+
+    scoreUI = makeLabel("Cash: $0", { 75.f, "12%", "9%", sf::Color::White });
 }
 
 #pragma endregion frames

@@ -19,13 +19,12 @@ public:
 	void updateValue(int line, std::string value);
 
 	void setCurrentName(tgui::String name);
-	void resetUser();
-	void createUserData();
+	void resetAndCreateUserData();
 
 	tgui::String getCurrentName();
 
 private:
 	tgui::String currentName;
-	int score = 0;
+	std::vector<std::string> dataTemplate = {"", "0"};
 };
 

@@ -25,7 +25,7 @@ std::string data::getInfo(int pointerLine)
 {
 	std::string value;
 
-	std::ifstream info("scores.txt");
+	std::ifstream info("data.txt");
 
 	if (info.is_open()) {
 		std::string line;
@@ -47,7 +47,7 @@ std::vector<std::string> data::getFullData()
 {
 	std::vector<std::string> arr;
 
-	std::ifstream info("scores.txt");
+	std::ifstream info("data.txt");
 
 	if (info.is_open()) {
 		std::string line;
@@ -64,7 +64,7 @@ void data::updateValue(int line, std::string value)
 {
 	std::vector<std::string> info = getFullData();
 
-	std::ofstream myfile("scores.txt");
+	std::ofstream myfile("data.txt");
 
 	if (myfile.is_open())
 	{
@@ -93,19 +93,17 @@ void data::setCurrentName(tgui::String name)
 	updateValue(1, sName);
 }
 
-void data::resetUser()
+void data::resetAndCreateUserData()
 {
-	std::ofstream myfile("scores.txt");
+	std::ofstream myfile("data.txt");
 
 	if (myfile.is_open()) {
+		for (std::string val : dataTemplate) {
+			myfile << val << "\n";
+		}
 		myfile.flush();
 		myfile.close();
 	}
-}
-
-void data::createUserData()
-{
-
 }
 
 tgui::String data::getCurrentName()
