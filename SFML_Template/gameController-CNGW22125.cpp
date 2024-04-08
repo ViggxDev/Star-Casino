@@ -1,5 +1,4 @@
 #include "gameController.h"
-#include "data.h"
 
 #include <iostream>
 #include <vector>
@@ -84,18 +83,3 @@ int gameController::getRouletteNumber()
     }
 }
 
-int gameController::getCurrentBet()
-{
-    return currentBet;
-}
-
-void gameController::changeCurrentBet(int increment)
-{
-    data Data;
-    if (currentBet + increment > std::stoi(Data.getInfo(1))) {
-        currentBet = std::stoi(Data.getInfo(1));
-    }
-    else {
-        currentBet += increment;
-    }
-}

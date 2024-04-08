@@ -12,7 +12,7 @@ void StartApplication() {
 	data Data;
 	gameController gc;
 
-	gc.dealersCards();
+	//gc.dealersCards();
 
 	Data.start();
 	Layout.start();
@@ -22,6 +22,16 @@ void StartApplication() {
 		Sleep(100);
 		Layout.update();
 	}
+}
+
+void test() {
+	gameController gc;
+	for (int i = 0; i < 100; i++)
+	{
+		gc.getRouletteNumber();
+	}
+	std::string test;
+	std::cin >> test;
 }
 
 //main entry

@@ -110,3 +110,13 @@ tgui::String data::getCurrentName()
 {
 	return getInfo(1);
 }
+
+void data::changeMode(int mode)
+{
+	inMode = mode;
+}
+
+bool data::getMode()
+{
+	return inMode;
+}

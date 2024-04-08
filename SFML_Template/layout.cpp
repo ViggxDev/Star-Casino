@@ -1,5 +1,6 @@
 #include "layout.h"
 #include "data.h"
+#include "gameController.h"
 
 #include <string>
 
@@ -12,7 +13,21 @@ void layout::start()
 //Runs while window is open
 void layout::update()
 {
-    //std::cout << "Updated!" << std::endl;
+    gameController gc;
+    data Data;
+    //std::cout << Data.getMode() << std::endl;
+    try {
+        if (scoreUI) {
+            scoreUI->setText("Cash: $" + Data.getInfo(1));
+        }
+        if (currentBet) {
+            currentBet->setText("$" + std::to_string(gc.getCurrentBet()));
+        }
+    }
+    catch (std::exception& e) {
+        std::cout << "scoreUI... raised an exception: " << e.what() << '\n';
+    }
+    
 }
 
 //Main part of the layout
@@ -33,14 +48,23 @@ void layout::btnPress(std::string text)
 
     //Function of buttons
     if (text == "LoadGameBtn") {
+        if (Data.getInfo(1) == "") {
+            Data.resetAndCreateUserData();
+            createOrResetUser();
+        }
+        else {
+            createGameFrame();
+        }
+    }
+    else if (text == "NewProfileBtn") {
         Data.resetAndCreateUserData();
         createOrResetUser();
     }
     else if (text == "PlayGameButton") {
         playBtnPress();
     }
-    else if (text == "EnterBlackJack") {
-        createBlackJackFrame();
+    else if (text == "RouletteMode") {
+        createRouletteFrame();
     }
     else {
         createMainMenu();
@@ -59,7 +83,7 @@ void layout::playBtnPress()
     }
     //Name was found
     Data.setCurrentName(tempName);
-    std::cout << Data.getCurrentName() << std::endl;
+    Data.updateValue(2, "100");
     createGameFrame();
 };
 
@@ -83,7 +107,7 @@ float layout::getPos(std::string p, bool isWidth) {
 
 //Create a Button and Call the btnPress func.
 //Tuple<size.x, size.y, position.x, position.y>
-void layout::makeButton(std::string btnName, std::string buttonText, const std::tuple<float, float, float, std::string, std::string>& sizeAndPos) {
+tgui::Button::Ptr layout::makeButton(std::string btnName, std::string buttonText, const std::tuple<float, float, float, std::string, std::string>& sizeAndPos) {
     auto button = tgui::Button::create(buttonText);
 
     button->setTextSize(std::get<0>(sizeAndPos));
@@ -281,26 +305,55 @@ void layout::createOrResetUser()
 
 void layout::createGameFrame()
 {
-    data Data;
-
     clearGui();
     scoreUI = makeLabel("Cash: $0", { 75.f, "12%", "9%", sf::Color::White });
 
     //Black Jack BTN
-    makeLabel("BLACKJACK", {100.f, "25%", "40%", sf::Color::White});
-    makeButton("EnterBlackJack", "ENTER", { 75.f, 450.f, 150.f, "25%", "55%" });
+    //makeLabel("BLACKJACK", {100.f, "25%", "40%", sf::Color::White});
+    //makeButton("EnterBlackJack", "ENTER", { 75.f, 450.f, 150.f, "25%", "55%" });
 
     //Slot Machine BTN
-    makeLabel("SLOT MACHINE", { 100.f, "75%", "40%", sf::Color::White });
-    makeButton("SlotMachine", "ENTER", { 75.f, 450.f, 150.f, "75%", "55%" });
+    makeLabel("ROULETTE", { 100.f, "50%", "40%", sf::Color::White });
+    makeButton("RouletteMode", "ENTER", { 75.f, 450.f, 150.f, "50%", "55%" });
 
     bg = 1;
 }
 
+#pragma region UnusedBlackjackFrame
 void layout::createBlackJackFrame()
 {
     clearGui();
     makeLabel("BLACKJACK", { 50.f, "50%", "9%", sf::Color::White });
+
+    scoreUI = makeLabel("Cash: $0", { 75.f, "12%", "9%", sf::Color::White });
+}
+
+#pragma endregion UnusedBlackjackFrame
+
+void layout::createRouletteFrame()
+{
+    clearGui();
+
+    //Title
+    makeLabel("ROULETTE", { 50.f, "50%", "9%", sf::Color::White });
+
+    //Decrement
+    makeButton("Decrement1", "-1", { 50.f, 150.f, 150.f, "35%", "65%" });
+    makeButton("Decrement5", "-5", { 50.f, 150.f, 150.f, "25%", "65%" });
+
+    //Current bet display
+    currentBet = makeLabel("$0", { 60.f, "50%", "50%", sf::Color::White});
+
+    //Increment
+    makeButton("Increment1", "+1", {50.f, 150.f, 150.f, "65%", "65%"});
+    makeButton("Increment5", "+5", { 50.f, 150.f, 150.f, "75%", "65%" });
+
+    //Big bet changes
+    makeButton("AllIn", "ALL IN", { 50.f, 250.f, 150.f, "50%", "65%" });
+    makeButton("ResetBet", "RESET", { 50.f, 250.f, 150.f, "50%", "85%" });
+
+    //Choose what to bet on btns
+    tgui::Button::Ptr greenBtn = makeButton("GreenBet", "BET", {50.f, 150.f, 150.f, "25%", "75%"});
 
     scoreUI = makeLabel("Cash: $0", { 75.f, "12%", "9%", sf::Color::White });
 }

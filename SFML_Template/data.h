@@ -23,7 +23,11 @@ public:
 
 	tgui::String getCurrentName();
 
+	void changeMode(int mode);
+	bool getMode();
+
 private:
+	int inMode = 0;
 	tgui::String currentName;
 	std::vector<std::string> dataTemplate = {"", "0"};
 };
