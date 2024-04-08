@@ -25,7 +25,7 @@ public:
 	void changeCurrentBet(int increment);
 	void resetBet();
 	void allIn();
-	void bet(std::string color);
+	std::string bet(std::string color);
 
 	static int currentBet;
 

@@ -1,5 +1,6 @@
 #include "gameController.h"
 #include "data.h"
+#include "layout.h"
 
 #include <iostream>
 #include <vector>
@@ -121,7 +122,7 @@ void gameController::allIn()
     currentBet = std::stoi(Data.getInfo(1));
 }
 
-void gameController::bet(std::string color)
+std::string gameController::bet(std::string color)
 {
     data Data;
 
@@ -147,4 +148,6 @@ void gameController::bet(std::string color)
 
     // Reset the current bet to 0 after the bet has been processed
     gameController::currentBet = 0;
+
+    return betClr;
 }

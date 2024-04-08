@@ -90,14 +90,14 @@ void layout::btnPress(std::string text)
     }
     //Bets
     else if (text == "greenBtn") {
-        gc.bet("green");
+        updateColor(gc.bet("green"));
     }
     else if (text == "redBtn") {
-        gc.bet("red");
+        updateColor(gc.bet("red"));
     }
     //Return back
     else if (text == "blackBtn") {
-        gc.bet("black");
+        updateColor(gc.bet("black"));
     }
     else if (text == "BackButton") {
         createGameFrame();
@@ -424,14 +424,21 @@ void layout::createRouletteFrame()
 
 void layout::updateColor(std::string color)
 {
-    colorUI->setText(color);
-    if (color == "green") {
+    gui->remove(colorUI);
+
+    // Convert color to uppercase
+    std::transform(color.begin(), color.end(), color.begin(),
+        [](unsigned char c) { return std::toupper(c); });
+
+    colorUI = makeLabel(color, { 75.f, "50%", "30%", sf::Color::White });
+
+    if (color == "GREEN") {
         colorUI->getRenderer()->setTextColor(tgui::Color::Green);
     }
-    else if (color == "red") {
+    else if (color == "RED") {
         colorUI->getRenderer()->setTextColor(tgui::Color::Red);
     }
-    else {
+    else if (color == "BLACK") {
         colorUI->getRenderer()->setTextColor(tgui::Color::Black);
     }
 }
