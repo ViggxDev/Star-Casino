@@ -21,6 +21,7 @@ void layout::update()
             scoreUI->setText("Cash: $" + Data.getInfo(1));
         }
         if (currentBet) {
+            //std::cout << gc.getCurrentBet() << std::endl;
             currentBet->setText("$" + std::to_string(gc.getCurrentBet()));
         }
     }
@@ -45,6 +46,7 @@ layout::layout()
 void layout::btnPress(std::string text)
 {
     data Data;
+    gameController gc;
 
     //Function of buttons
     if (text == "LoadGameBtn") {
@@ -65,6 +67,40 @@ void layout::btnPress(std::string text)
     }
     else if (text == "RouletteMode") {
         createRouletteFrame();
+    }
+    //Increment/ decrement bet
+    else if (text == "Decrement1") {
+        gc.changeCurrentBet(-1);
+    }
+    else if (text == "Decrement5") {
+        gc.changeCurrentBet(-5);
+    }
+    else if (text == "Increment1") {
+        gc.changeCurrentBet(1);
+    }
+    else if (text == "Increment5") {
+        gc.changeCurrentBet(5);
+    }
+    //Big changes (bet)
+    else if (text == "ResetBet") {
+        gc.resetBet();
+    }
+    else if (text == "AllIn") {
+        gc.allIn();
+    }
+    //Bets
+    else if (text == "greenBtn") {
+        gc.bet("green");
+    }
+    else if (text == "redBtn") {
+        gc.bet("red");
+    }
+    //Return back
+    else if (text == "blackBtn") {
+        gc.bet("black");
+    }
+    else if (text == "BackButton") {
+        createGameFrame();
     }
     else {
         createMainMenu();
@@ -128,6 +164,8 @@ tgui::Button::Ptr layout::makeButton(std::string btnName, std::string buttonText
     gui->add(button);
 
     button->onPress.connect([this, btnName]() { this->btnPress(btnName); });
+
+    return button;
 }
 
 //Function to create label
@@ -182,13 +220,13 @@ void layout::updateScoreUI(int score)
 }
 
 // Set the background gradient
-void layout::setBackgroundGradient() {
+void layout::setBackgroundGradient(sf::Color colorLeft, sf::Color colorRight) {
     // Create a vertex array for the background
     sf::VertexArray background(sf::Quads, 4);
 
     // Define the gradient colors
-    sf::Color colorLeft(157, 197, 187);
-    sf::Color colorRight(94, 128, 127);
+    //sf::Color colorLeft(157, 197, 187);
+    //sf::Color colorRight(94, 128, 127);
 
     // Set the gradient colors and positions for each vertex
     for (int i = 0; i < 4; ++i) {
@@ -260,7 +298,10 @@ void layout::DisplayWindow()
         //Check what bg to use
         switch (bg) {
         case 0:
-            setBackgroundGradient();
+            setBackgroundGradient(sf::Color(157, 197, 187), sf::Color(94, 128, 127));
+            break;
+        default:
+            setBackgroundGradient(sf::Color(108, 42, 173), sf::Color(173, 42, 156));
         }
 
         //Display window
@@ -316,6 +357,8 @@ void layout::createGameFrame()
     makeLabel("ROULETTE", { 100.f, "50%", "40%", sf::Color::White });
     makeButton("RouletteMode", "ENTER", { 75.f, 450.f, 150.f, "50%", "55%" });
 
+    makeButton("BackToLobby", "BACK", { 50.f, 200.f, 100.f, "50%", "75%" });
+
     bg = 1;
 }
 
@@ -332,10 +375,16 @@ void layout::createBlackJackFrame()
 
 void layout::createRouletteFrame()
 {
+    gameController gc;
+    gc.resetBet();
+
     clearGui();
 
     //Title
     makeLabel("ROULETTE", { 50.f, "50%", "9%", sf::Color::White });
+
+    //Bet result
+    colorUI = makeLabel("WAITING FOR BET", {75.f, "50%", "30%", sf::Color::White});
 
     //Decrement
     makeButton("Decrement1", "-1", { 50.f, 150.f, 150.f, "35%", "65%" });
@@ -353,9 +402,38 @@ void layout::createRouletteFrame()
     makeButton("ResetBet", "RESET", { 50.f, 250.f, 150.f, "50%", "85%" });
 
     //Choose what to bet on btns
-    tgui::Button::Ptr greenBtn = makeButton("GreenBet", "BET", {50.f, 150.f, 150.f, "25%", "75%"});
+    tgui::Button::Ptr greenBtn = makeButton("greenBtn", "BET", {50.f, 150.f, 150.f, "65%", "85%"});
+    greenBtn->getRenderer()->setBackgroundColor(tgui::Color::Green);
+    greenBtn->getRenderer()->setBackgroundColorHover(tgui::Color::Green);
+
+    tgui::Button::Ptr redBtn = makeButton("redBtn", "BET", { 50.f, 150.f, 150.f, "35%", "85%" });
+    redBtn->getRenderer()->setBackgroundColor(tgui::Color::Red);
+    redBtn->getRenderer()->setBackgroundColorHover(tgui::Color::Red);
+
+    tgui::Button::Ptr blackBtn = makeButton("blackBtn", "BET", { 50.f, 150.f, 150.f, "25%", "85%" });
+    blackBtn->getRenderer()->setBackgroundColor(tgui::Color::Black);
+    blackBtn->getRenderer()->setBackgroundColorHover(tgui::Color::Black);
+    blackBtn->getRenderer()->setTextColor(tgui::Color::White);
+    blackBtn->getRenderer()->setTextColorHover(tgui::Color::White);
+
+    //Back btn
+    makeButton("BackButton", "BACK", { 50.f, 150.f, 150.f, "75%", "85%" });
 
     scoreUI = makeLabel("Cash: $0", { 75.f, "12%", "9%", sf::Color::White });
+}
+
+void layout::updateColor(std::string color)
+{
+    colorUI->setText(color);
+    if (color == "green") {
+        colorUI->getRenderer()->setTextColor(tgui::Color::Green);
+    }
+    else if (color == "red") {
+        colorUI->getRenderer()->setTextColor(tgui::Color::Red);
+    }
+    else {
+        colorUI->getRenderer()->setTextColor(tgui::Color::Black);
+    }
 }
 
 #pragma endregion frames

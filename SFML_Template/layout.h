@@ -24,7 +24,7 @@ public:
     void updateScoreUI(int score);
 
     bool RunGUI();
-    void setBackgroundGradient();
+    void setBackgroundGradient(sf::Color colorLeft, sf::Color colorRight);
 
     void clearGui();
 
@@ -35,6 +35,8 @@ public:
     void createGameFrame();
     void createBlackJackFrame();
     void createRouletteFrame();
+
+    void updateColor(std::string color);
 private:
     tgui::GuiSFML* gui;
     sf::RenderWindow* window;
@@ -47,6 +49,7 @@ private:
     //Labels
     tgui::Label::Ptr scoreUI;
     tgui::Label::Ptr currentBet;
+    tgui::Label::Ptr colorUI;
 
     //BG color (0) = Gradient, (!0) = Black
     int bg;

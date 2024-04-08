@@ -4,9 +4,11 @@
 #include <iostream>
 #include <vector>
 #include <random>
+#include <cmath>
 
-gameController::gameController()
-{
+int gameController::currentBet = 0;
+
+gameController::gameController() {
 }
 
 int randomNum(int min, int max) {
@@ -65,37 +67,84 @@ std::vector<std::string> gameController::dealersCards()
     return std::vector<std::string>();
 }
 
-int gameController::getRouletteNumber()
+std::string gameController::getRouletteNumber()
 {
     int numbers = 38;
     std::vector<int> green = { 1, 2 };
     int number = randomNum(1, numbers);
 
-    std::cout << number << std::endl;
+    //std::cout << number << std::endl;
 
     if (std::find(green.begin(), green.end(), number) != green.end()) {
-        std::cout << "Is green" << std::endl;
+        return "green";
     }
     else if (number % 2 == 0) {
-        std::cout << "Is red" << std::endl;
+        return "red";
     }
     else {
-        std::cout << "Is Black" << std::endl;
+        return "black";
     }
 }
 
 int gameController::getCurrentBet()
 {
-    return currentBet;
+    return gameController::currentBet;
 }
 
 void gameController::changeCurrentBet(int increment)
 {
     data Data;
-    if (currentBet + increment > std::stoi(Data.getInfo(1))) {
-        currentBet = std::stoi(Data.getInfo(1));
+
+    //Check if it is bigger than what the player has
+    if (gameController::currentBet + increment > std::stoi(Data.getInfo(1))) {
+        gameController::currentBet = std::stoi(Data.getInfo(1));
+    }
+    else if (gameController::currentBet < 0) {
+        gameController::currentBet = 0;
     }
     else {
-        currentBet += increment;
+        gameController::currentBet += increment;
     }
+
+    std::cout << gameController::currentBet << std::endl;
+}
+
+void gameController::resetBet()
+{
+    std::cout << "reset" << std::endl;
+    gameController::currentBet = 0;
+}
+
+void gameController::allIn()
+{
+    data Data;
+    currentBet = std::stoi(Data.getInfo(1));
+}
+
+void gameController::bet(std::string color)
+{
+    data Data;
+
+    std::string betClr = getRouletteNumber();
+
+    // Update the player's total balance by subtracting the current bet
+    int balance = std::stoi(Data.getInfo(1));
+    Data.updateValue(2, std::to_string(balance - currentBet));
+
+    // Check if the bet was a win or a loss
+    if (color == betClr) {
+        // Win
+        int winAmount = 0;
+        if (color == "black" || color == "red") {
+            winAmount = gameController::currentBet * smallWin;
+        }
+        else if (color == "green") {
+            winAmount = gameController::currentBet * bigWin;
+        }
+        // Update the player's total balance by adding the win amount
+        Data.updateValue(2, std::to_string(balance + winAmount));
+    }
+
+    // Reset the current bet to 0 after the bet has been processed
+    gameController::currentBet = 0;
 }
